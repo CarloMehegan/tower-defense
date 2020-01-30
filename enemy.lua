@@ -13,7 +13,7 @@ function Enemy:initialize( table )
     self.goaltablelength = self.goaltablelength + 1
   end
   self.currentgoal = 1
-  self.speed = 1
+  self.speed = table.speed or 1
   self.onPath = false
   self.gx = 0
   self.gy = 0
@@ -54,7 +54,7 @@ function Enemy:setPath(gx,gy) -- goalx, goaly
 end
 
 function Enemy:updatePath() -- goalx, goaly
-  local error = 3
+  local error = 5
   if self.x < self.gx + error
     and self.x > self.gx - error
     and self.y < self.gy + error
@@ -69,6 +69,7 @@ function Enemy:updatePath() -- goalx, goaly
     local diffy = self.gy - self.y
     --hypotenuse
     local c = math.sqrt(diffx*diffx + diffy*diffy)
+    c = c / self.speed
     --normalizing
     self.dx = diffx / c
     self.dy = diffy / c
