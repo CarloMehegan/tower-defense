@@ -7,6 +7,7 @@ function Enemy:initialize( table )
   self.y = table.y or love.math.random(100,200)
   self.dx = 0
   self.dy = 0
+  self.r = 10
   self.goals = table.goals or {}
   self.goaltablelength = 0
   for i,v in ipairs(self.goals) do
@@ -35,7 +36,7 @@ end
 
 function Enemy:draw()
   love.graphics.setColor(0, 0, 0, 1)
-  love.graphics.circle("fill", self.x, self.y, 10)
+  love.graphics.circle("fill", self.x, self.y, self.r)
 end
 
 function Enemy:setPath(gx,gy) -- goalx, goaly
