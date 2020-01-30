@@ -29,6 +29,9 @@ function love.load()
   end, 1)
 
   t = Tower:new({ x = 250, y = 400 })
+  towertimer = Timer:new(function() 
+    t:lockOn(enemies)
+  end, 0.25)
 end
 
 function love.update(dt)
@@ -39,7 +42,7 @@ function love.update(dt)
     end
   end
   t:update(dt)
-  t:lockOn(enemies)
+  towertimer:update(dt)
   mousetimer:update(dt)
   enemytimer:update(dt)
 end

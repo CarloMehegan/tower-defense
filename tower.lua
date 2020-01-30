@@ -33,11 +33,12 @@ function Tower:lockOn(enemies)
     j = j - 1
   end
 
-  --find target
-  if self.hasTarget == false then
-
-  for k,v in pairs(e) do -- look through all enemies
-    if self.hasTarget == false then
+  --find enemy thats first in line and save their key in the array
+  local firstinline = 0
+  local firstinlinekey = 0
+  for k,v in pairs(e) do
+    firstinline = math.max( firstinline, v.currentgoal )
+    if v.currentgoal == firstinline then
       a = self.x - v.x
       b = self.y - v.y
       c = math.sqrt((a* a) + (b * b))
@@ -45,24 +46,19 @@ function Tower:lockOn(enemies)
         self.target = v
         self.hasTarget = true
       end
-    else
-      break -- look for enemy, stop when found one
+      firstinlinekey = k
     end
   end
-
-  --if there's already a target, continue fire
-  else
-    a = self.x - self.target.x
-    b = self.y - self.target.y
-    c = math.sqrt((a* a) + (b * b))
-    if c < self.reachradius + self.target.r then
-      self:shoot(self.target) -- make bullet
-    else
-      self.hasTarget = false
-    end
+  
+  if self.hasTarget then
+    self:shoot(self.target)
+    self.hasTarget = false
   end
 
 end
+
+
+
 
 function Tower:shoot(v)
   --direction to go
