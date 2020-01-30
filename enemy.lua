@@ -34,7 +34,8 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-  love.graphics.circle("line", self.x, self.y, 10)
+  love.graphics.setColor(0, 0, 0, 1)
+  love.graphics.circle("fill", self.x, self.y, 10)
 end
 
 function Enemy:setPath(gx,gy) -- goalx, goaly
