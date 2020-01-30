@@ -25,23 +25,32 @@ function love.load()
   end, 0.05)
 
   enemytimer = Timer:new(function()
-    table.insert(enemies, Enemy:new({ x = 10, y = 10, goals = goals, speed = .5}) )
+    table.insert(enemies, Enemy:new({ x = 10, y = 10, goals = goals, speed = 0.5}) )
   end, 1)
 
   t = Tower:new({ x = 250, y = 400 })
   towertimer = Timer:new(function() 
     t:lockOn(enemies)
-  end, 0.25)
+  end, 0.75)
 end
 
 function love.update(dt)
   for k,e in pairs(enemies) do
     e:update()
-    if e.x > 900 then
+    if e.x > 900 or e.dead == true then -- TEMP
       table.remove( enemies, k )
+    end -- TEMP
+  end
+  for k,v in pairs(t.projectiles) do
+    for k1,e in pairs(enemies) do
+      -- checks if the circles collide
+      if checkCircleCollision(e,v) then
+        e.hp = e.hp - 1
+        table.remove( t.projectiles, k )
+      end
     end
   end
-  t:update(dt)
+  t:update(dt, enemies)
   towertimer:update(dt)
   mousetimer:update(dt)
   enemytimer:update(dt)
@@ -73,6 +82,17 @@ function love.keypressed(key, scancode, isrepeat)
   end
 end
 
+
+function checkCircleCollision(ob1, ob2)
+  a = ob1.x - ob2.x
+  b = ob1.y - ob2.y
+  c = math.sqrt((a* a) + (b * b))
+  if c < ob1.r + ob2.r then
+    return true
+  else
+    return false
+  end
+end
 
 -- for saving path data from mouse recording
 function table.val_to_str ( v )

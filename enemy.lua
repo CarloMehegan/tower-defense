@@ -18,6 +18,8 @@ function Enemy:initialize( table )
   self.onPath = false
   self.gx = 0
   self.gy = 0
+  self.hp = 3
+  self.dead = false
 end
 
 function Enemy:update(dt)
@@ -29,7 +31,10 @@ function Enemy:update(dt)
 
   if self.onPath == false then
     self:setPath(self.goals[self.currentgoal][1], self.goals[self.currentgoal][2])
-    -- self:setPath(400, 400)
+  end
+
+  if self.hp <= 0 then
+    self.dead = true
   end
 
 end

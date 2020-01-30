@@ -16,7 +16,7 @@ end
 
 function Tower:update(dt)
   for k,v in pairs(self.projectiles) do
-    v:update(dt)
+    v:update(dt, enemies)
     if v.dead then
       table.remove( self.projectiles, k )
     end

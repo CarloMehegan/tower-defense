@@ -8,6 +8,7 @@ function Bullet:initialize( table )
   self.dx = table.dx or 0
   self.dy = table.dy or 0
   self.speed = table.speed or 1
+  self.r = 4
   self.dead = false
 end
 
@@ -22,7 +23,7 @@ end
 
 function Bullet:draw()
   love.graphics.setColor(1, 0, 1, 1)
-  love.graphics.circle("fill", self.x, self.y, 4)
+  love.graphics.circle("fill", self.x, self.y, self.r)
   love.graphics.print(self.dx .. " , " .. self.dy)
 end
 
