@@ -2,6 +2,8 @@ local class = require 'middleclass'
 
 local Bullet = require 'bullet'
 
+local Timer = require 'timer'
+
 Tower = class('Tower')
 
 function Tower:initialize( table )
@@ -12,9 +14,13 @@ function Tower:initialize( table )
   self.projectiles = {}
   self.hasTarget = false
   self.target = null
+  self.timer = Timer:new(function() 
+    self:lockOn(enemies)
+  end, {max = self.speed, manualreset = true})
 end
 
 function Tower:update(dt)
+  self.timer:update(dt)
   for k,v in pairs(self.projectiles) do
     v:update(dt, enemies)
     if v.dead then
@@ -51,14 +57,12 @@ function Tower:lockOn(enemies)
   end
   
   if self.hasTarget then
+    self.timer.current = 0
     self:shoot(self.target)
     self.hasTarget = false
   end
 
 end
-
-
-
 
 function Tower:shoot(v)
   --direction to go
@@ -73,9 +77,10 @@ function Tower:shoot(v)
 end
 
 function Tower:draw()
-  love.graphics.setColor(0, 0, 1, 1)
+  local timepercent = self.timer.current / self.timer.max * 0.4
+  love.graphics.setColor(0.4 - timepercent, 0.4 - timepercent, 1, 1)
   love.graphics.circle("fill", self.x, self.y, 20)
-  love.graphics.setColor(1, 0, 1, 0.3)
+  love.graphics.setColor(1, 0, 1, 0.2)
   love.graphics.circle("fill", self.x, self.y, self.reachradius)
   for k,v in pairs(self.projectiles) do
     v:draw()

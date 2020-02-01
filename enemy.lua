@@ -19,6 +19,7 @@ function Enemy:initialize( table )
   self.gx = 0
   self.gy = 0
   self.hp = 3
+  self.maxhp = self.hp
   self.dead = false
 end
 
@@ -42,6 +43,11 @@ end
 function Enemy:draw()
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.circle("fill", self.x, self.y, self.r)
+  if self.hp < self.maxhp then
+    love.graphics.rectangle("line", self.x - self.r, self.y - self.r - 5, self.r*2, 3)
+    local hppercent = self.hp/self.maxhp
+    love.graphics.rectangle("fill", self.x - self.r, self.y - self.r - 5, self.r*2 * hppercent, 3)
+  end
 end
 
 function Enemy:setPath(gx,gy) -- goalx, goaly
