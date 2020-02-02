@@ -2,12 +2,18 @@ local class = require 'middleclass'
 
 Enemy = class('Enemy')
 
+colors = {
+  {.9,.1,.1},
+  {.1,.1,.9},
+  {.1,.9,.3},
+  {.9,.9,.1}
+}
+
 function Enemy:initialize( table )
   self.x = table.x or love.math.random(100,200)
   self.y = table.y or love.math.random(100,200)
   self.dx = 0
   self.dy = 0
-  self.r = 10
   self.goals = table.goals or {}
   self.goaltablelength = 0
   for i,v in ipairs(self.goals) do
@@ -18,9 +24,11 @@ function Enemy:initialize( table )
   self.onPath = false
   self.gx = 0
   self.gy = 0
-  self.hp = 3
-  self.maxhp = self.hp
   self.dead = false
+  self.hp = love.math.random(1,4)
+  self.maxhp = self.hp
+  self.c = colors[self.hp]
+  self.r = 10 + self.hp
 end
 
 function Enemy:update(dt)
@@ -28,6 +36,8 @@ function Enemy:update(dt)
     self:updatePath()
     self.x = self.x + self.dx*self.speed*4
     self.y = self.y + self.dy*self.speed*4
+    self.c = colors[self.hp]
+    self.r = 10 + self.hp
   end
 
   if self.onPath == false then
@@ -41,7 +51,9 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-  love.graphics.setColor(0, 0, 0, 1)
+  love.graphics.setColor(0,0,0,1)
+  love.graphics.circle("fill", self.x, self.y, self.r + 1)
+  love.graphics.setColor(self.c)
   love.graphics.circle("fill", self.x, self.y, self.r)
   if self.hp < self.maxhp then
     love.graphics.rectangle("line", self.x - self.r, self.y - self.r - 5, self.r*2, 3)
